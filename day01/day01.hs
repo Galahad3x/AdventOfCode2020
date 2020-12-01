@@ -13,12 +13,16 @@ part_2 = (part_2_res!!0) * (part_2_res!!1) * (part_2_res!!2)
 
 part_2' :: [Int] -> [Int]
 part_2' [] = [0, 0, 0]
+--suma_res retorna una tupla amb els 2 sumants que falten, si retorna (0, _) vol dir que x no té cap altres 2 numeros amb qui sumar 2020
 part_2' (x:xs) = if (fst suma_res) /= 0 then [x, fst suma_res, snd suma_res] else part_2' xs
 	where suma_res = trobar_suma_3 x xs
 	
+-- mirar si x1 es un dels 3 sumants
 trobar_suma_3 :: Int -> [Int] -> (Int, Int)
 trobar_suma_3 _ [] = (0, 0)
-trobar_suma_3 x1 (x:xs) = if res /= 0 then (x, res) else trobar_suma_3 x xs
+-- res es el 3r sumant -> Fixant x1 i x si en trobo un altre es res
+-- si res es 0 x1 + x no te cap numero que sumat doni 2020
+trobar_suma_3 x1 (x:xs) = if res /= 0 then (x, res) else trobar_suma_3 x1 xs
 	where res = trobar_suma_3' x1 x xs
 	
 trobar_suma_3' :: Int -> Int -> [Int] -> Int
