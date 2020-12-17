@@ -200,45 +200,30 @@ class Cube2:
 		new_files = num_files + 2 # A dalt i a baix
 		new_elems = num_elems + 2 # Al principi i al final
 		new_hypers = num_hypers + 2
-		new_cube = []
-		if num_files == 1:
-			print(self.data.shape)
-			print(self.data)
-			for f in range(new_files):
-				new_fila = [[0] * len(self.data[f])]
-				for e in range(new_elems):
-					new_elem = [0]
-					for h in range(new_hypers):
-						new_elem.append(h)
-					new_elem.append(0)
-					new_fila.append(new_elem)
-				new_fila.append([0] * len(self.data[f]))
-				new_cube.append(new_fila)
-		else:
-			for c in range(new_capes):
-				new_capa = [[[0] * len(self.data[c][0])] * len(self.data[c])]
-				for f in range(new_files):
-					new_fila = [[0] * len(self.data[c][f][0])]
-					for e in range(new_elems):
-						new_elem = [0]
-						for h in range(new_hypers):
-							new_elem.append(h)
-						new_elem.append(0)
-						new_fila.append(new_elem)
-					new_fila.append([0] * len(self.data[c][f][0]))
-					new_capa.append(new_fila)
-				new_capa.append([[[0] * len(self.data[c][0])] * len(self.data[c])])
-				new_cube.append(new_capa)
-		self.data = np.array(new_cube)
+		new_cube = np.zeros((new_capes, new_files, new_elems, new_hypers), dtype=np.int64)
+		for c in range(num_capes):
+			for f in range(num_files):
+				for e in range(num_elems):
+					for h in range(num_hypers):
+						if num_capes == 1:
+							if num_files == 1:
+								new_cube[c + 1][f + 1][e + 1][h + 1] = self.data[e][h]
+							else:
+								new_cube[c + 1][f + 1][e + 1][h + 1] = self.data[f][e][h]
+						else:
+							new_cube[c + 1][f + 1][e + 1][h + 1] = self.data[c][f][e][h]
+		self.data = new_cube
+						
 		
 def part_2():
 	cube = Cube2(read_input())
 	cube.expand()
-	print(cube.data)
+	# print(cube.data)
 	for t in range(6):
 		cube.update()
 		if cube.needs_expansion():
 			cube.expand()
+		print(t)
 	print(cube.data)
 	print("Part 2: ", cube.data.sum())
 
